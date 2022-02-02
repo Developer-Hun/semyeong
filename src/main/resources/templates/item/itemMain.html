@@ -1,0 +1,112 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+
+<head>
+    <!-- title -->
+    <title>품목 관리</title>
+    <!-- /title -->
+
+    <!-- 사용자 style -->
+    <th:block layout:fragment="userStyle">
+    </th:block>
+    <!-- /style -->
+</head>
+
+<body>
+    <!-- content title -->
+    <div class="title_left" layout:fragment="contentTitle">
+        <h3></h3>
+    </div>
+    <!-- /content title -->
+
+    <!-- modal  -->
+    <div id="modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" layout:fragment="contentModal">
+        <div class="modal-dialog modal-sm">
+            <div id="modal-content" class="modal-content"></div>
+        </div>
+    </div>
+    <!-- /modal -->
+
+    <!-- hidden inputs -->
+    <form id="hiddenInputs" layout:fragment="hiddenInputs">
+        <input type="hidden" th:id="currentPageNumber" th:value="${itemPage.getNumber()}">
+    </form>
+    <!-- /hidden inputs -->
+
+    <!-- content body -->
+    <div class="col-md-12 col-sm-12" layout:fragment="contentBody">
+        <div class="x_panel">
+            <div class="x_title" style="display: flex; align-items: center; justify-content: space-between;">
+                <h2>품목 관리</h2>
+                <div>
+                    <button id="showItemNewBtn" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm">추가</button>
+                    <button id="deleteItemBtn" type="button" class="btn btn-danger btn-sm">삭제</button>
+                </div>
+            </div>
+            <div class="x_content">
+                <div class="table-responsive">
+                    <table class="table table-striped jambo_table bulk_action" style="text-align: center">
+                        <thead>
+                            <tr class="headings">
+                                <th>
+                                    <div class="icheckbox_flat-green" style="position: relative;">
+                                        <input type="checkbox" id="check-all" class="flat" style="position: absolute; opacity: 0;">
+                                    </div>
+                                </th>
+                                <th class="column-title" style="display: table-cell;">품목명</th>
+                                <th class="column-title" style="display: table-cell;">단위명</th>
+                                <th class="column-title" style="display: table-cell;">상태</th>
+                                <th class="column-title" style="display: table-cell;">수량</th>
+                                <th class="column-title" style="display: table-cell;">비고</th>
+                                <th class="column-title" style="display: table-cell;">등록일</th>
+                                <th class="column-title" style="display: table-cell;">수정일</th>
+                                <th class="column-title no-link last" style="display: table-cell;"><span class="nobr">상세보기</span>
+                                </th>
+                                <th class="bulk-actions" colspan="8" style="display: none;">
+                                    <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt">1 Records Selected</span> ) <i class="fa fa-chevron-down"></i></a>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="even pointer" th:each="item : ${itemPage.getContent()}" th:id="${item.id}">
+                                <td class="a-center">
+                                    <div class="icheckbox_flat-green" style="position: relative;">
+                                        <input type="checkbox" class="flat checkbox" name="table_records" th:value="${item.id}" style="position: absolute; opacity: 0;">
+                                    </div>
+                                </td>
+                                <td class="" th:text="${item.itemName}">오리(10호)</td>
+                                <td class="" th:text="${item.unit}">마리</td>
+                                <td class="" th:text="${item.statusType.getName()}">사용</td>
+                                <td class="" th:text="${item.stockQuantity}">10</td>
+                                <td class="" th:text="${item.comment}">10</td>
+                                <td class="" th:text="${#temporals.format(item.createdDate, 'yyyy-MM-dd HH:mm:ss')}">2022-01-31</td>
+                                <td class="" th:text="${#temporals.format(item.updatedDate, 'yyyy-MM-dd HH:mm:ss')}">2022-01-31</td>
+                                <td class="last">
+                                    <a href="" th:onclick="|itemMain.showItemEditRequest(${item.id})|"
+                                       onclick="itemMain.showItemEditRequest(1)" data-toggle="modal" data-target=".bs-example-modal-sm">View</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /content body -->
+
+    <div layout:fragment="paging">
+        <ul th:replace="~{common/pagination::pagination (${itemPage.totalElements}, ${itemPage.isLast()}, ${itemPage.totalPages},
+                                                        ${itemPage.getNumber()}, ${itemPage.getSize()}, ${itemPage.isFirst()},
+                                                        ${itemPage.getNumberOfElements()}, ${itemPage.isEmpty()})}">
+        </ul>
+    </div>
+
+    <!-- 사용자 script -->
+    <th:block layout:fragment="userScript">
+        <script th:src="@{/js/item/itemMain.js}"></script>
+        <script th:src="@{/js/item/itemNew.js}"></script>
+        <script th:src="@{/js/item/itemEdit.js}"></script>
+    </th:block>
+    <!-- /script -->
+</body>
+</html>

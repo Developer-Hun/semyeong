@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<div class="right_col" role="main" th:fragment="contentFragment">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left" layout:fragment="contentTitle">
+                <h3>Plain Page</h3>
+            </div>
+
+<!--            <div class="title_right">-->
+<!--                <div class="col-md-5 col-sm-5   form-group pull-right top_search">-->
+<!--                    <div class="input-group">-->
+<!--                        <input type="text" class="form-control" placeholder="Search for...">-->
+<!--                        <span class="input-group-btn">-->
+<!--                      <button class="btn btn-default" type="button">Go!</button>-->
+<!--                    </span>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+        </div>
+
+        <div class="clearfix"></div>
+
+        <form id="hiddenInputs" layout:fragment="hiddenInputs">
+            히든 영역
+        </form>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12" layout:fragment="contentBody">
+                본문 영역
+            </div>
+        </div>
+
+        <div layout:fragment="paging">
+            페이징 영역
+        </div>
+
+        <div id="modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" layout:fragment="contentModal">
+            모달 영역
+        </div>
+    </div>
+</div>
+
+</html>

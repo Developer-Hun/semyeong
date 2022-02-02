@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<ul class="pagination justify-content-end"
+    th:fragment="pagination (totalElementCnt, isLast, totalPageCnt, currentNumber, size, isFirst, currentElementCnt, isEmpty)"
+    th:with="start=${T(Math).floor(currentNumber/10)}*10+1,
+    end=(${totalPageCnt} == 0) ? 1 : ((${totalPageCnt} > ${start}+9) ? ${start}+9 : ${totalPageCnt})">
+
+    <li class="page-item" th:classappend="${isFirst}? disabled : _">
+        <a class="page-link" th:data-pageNum="${currentNumber}-1" href="javascript:void(0);">이전</a>
+    </li>
+
+    <th:block th:each="pageNum : ${#numbers.sequence(start, end)}">
+        <li class="page-item" th:classappend="${(currentNumber+1) eq pageNum}? active : _">
+            <a class="page-link" th:data-pageNum="${pageNum}-1" th:text="${pageNum}" href="javascript:void(0);">1</a>
+        </li>
+    </th:block>
+
+    <li class="page-item" th:classappend="${isLast}? disabled : _">
+        <a class="page-link" th:data-pageNum="${currentNumber}+1" href="javascript:void(0);">다음</a>
+    </li>
+
+</ul>
+
+</html>

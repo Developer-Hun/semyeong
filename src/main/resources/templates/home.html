@@ -1,0 +1,36 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+
+<head>
+    <!-- title -->
+    <title>plain</title>
+    <!-- /title -->
+
+    <!-- 사용자 style -->
+    <th:block layout:fragment="userStyle">
+        <style>
+        </style>
+    </th:block>
+    <!-- /style -->
+</head>
+
+<body>
+    <!-- content title -->
+    <div class="title_left" layout:fragment="contentTitle">
+        <h3>Plain Page2222</h3>
+    </div>
+    <!-- /content title -->
+
+    <!-- content body -->
+    <div class="col-md-12 col-sm-12 col-xs-12" layout:fragment="contentBody">
+    </div>
+    <!-- /content body -->
+
+    <!-- 사용자 script -->
+    <th:block layout:fragment="userScript">
+        <script>
+        </script>
+    </th:block>
+    <!-- /script -->
+</body>
+</html>
