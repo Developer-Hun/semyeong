@@ -19,7 +19,17 @@ const accountNew = {
     },
 
     addItemRow: () => {
+        return;
+        // TODO : 객체 반복문으로 새로운 아이템 추가하는 로직 구현
         let tbodyTag = document.querySelector('#itemList');
+
+        $(".catecory").empty()
+
+        const rows = accountNew.items.map((item, i) => {
+            return `<option value="" selected>오리 10호</option> <a href="#" class="cat-item">${item.categoryName}</a>`
+        }).join('')
+
+
         let row =   `<tr>
                         <td>
                             <select class="select2_single form-control" tabIndex="-1">
@@ -49,7 +59,13 @@ const accountNew = {
 
     getItemsRequest: () => {
         const successHandler= (data) => {
-            accountNew.items = data;
+
+            accountNew.items = data.reduce((res, item, index, array) => {
+                res[item.id] = item
+                return res;
+            }, {});
+
+            // accountNew.items = data;
             accountNew.addItemRow();
         }
 
