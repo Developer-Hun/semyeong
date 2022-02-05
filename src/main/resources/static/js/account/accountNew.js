@@ -18,39 +18,41 @@ const accountNew = {
         accountNew.addItemRow();
     },
 
+    setItem: (target) => {
+        const selectedId = target.value;
+        const findItem = accountNew.items.find((item) => item.id == selectedId);
+
+        let tr = target.closest(`tr`);
+        tr.querySelector(`[name='unit']`).value = findItem.unit;
+        tr.querySelector(`[name='stockQuantity']`).value = findItem.stockQuantity;
+        tr.querySelector(`[name='comment']`).value = findItem.comment;
+    },
+
     addItemRow: () => {
-        return;
-        // TODO : 객체 반복문으로 새로운 아이템 추가하는 로직 구현
         let tbodyTag = document.querySelector('#itemList');
 
-        $(".catecory").empty()
-
-        const rows = accountNew.items.map((item, i) => {
-            return `<option value="" selected>오리 10호</option> <a href="#" class="cat-item">${item.categoryName}</a>`
+        const options = accountNew.items.map((item, i) => {
+            return `<option value="${item.id}" >${item.itemName}</option>`
         }).join('')
-
 
         let row =   `<tr>
                         <td>
-                            <select class="select2_single form-control" tabIndex="-1">
-                                <option value="" selected>오리 10호</option>
-                                <option value="">닭 7호</option>
+                            <select class="select2_single form-control" tabIndex="-1" onchange="accountNew.setItem(this)">
+                                <option value="" selected>선택해주세요</option>
+                                ${options}
                             </select>
                         </td>
                         <td>
-                            <select class="select2_single form-control" tabIndex="-1">
-                                <option value="" selected>마리</option>
-                                <option value="">팩</option>
-                            </select>
+                            <input type="text" class="form-control" name="unit" readOnly="readonly" value="">
                         </td>
                         <td>
-                            <input type="text" class="form-control" value="12,000">
+                            <input type="text" class="form-control" name="price" value="">
                         </td>
                         <td>
-                            <input type="text" class="form-control" readOnly="readonly" value="100">
+                            <input type="text" class="form-control" name="stockQuantity" value="" readOnly="readonly">
                         </td>
                         <td>
-                            <input type="text" class="form-control" readOnly="readonly" value="오리다">
+                            <input type="text" class="form-control" name="comment" value="" readOnly="readonly">
                         </td>
                     </tr>`
 
@@ -59,13 +61,7 @@ const accountNew = {
 
     getItemsRequest: () => {
         const successHandler= (data) => {
-
-            accountNew.items = data.reduce((res, item, index, array) => {
-                res[item.id] = item
-                return res;
-            }, {});
-
-            // accountNew.items = data;
+            accountNew.items = data;
             accountNew.addItemRow();
         }
 
