@@ -16,13 +16,13 @@ const itemNew = {
         const itemName = document.querySelector('#itemName').value
         const unit = document.querySelector('#unit').value
         const statusType = document.querySelector('#statusType').value
-        const comment = document.querySelector('#comment').value
+        const comments = document.querySelector('#comments').value
 
         const request = {
             itemName,
             unit,
             statusType,
-            comment,
+            comments,
         }
 
         const successHandler= (data) => {

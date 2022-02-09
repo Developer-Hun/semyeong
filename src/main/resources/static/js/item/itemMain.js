@@ -44,6 +44,7 @@ const itemMain = {
 
     showItemEditRequest: (itemId) => {
         const successHandler= (data) => {
+            console.log(data);
             document.querySelector('#modal-content').innerHTML = data;
             itemEdit.bind();
         }

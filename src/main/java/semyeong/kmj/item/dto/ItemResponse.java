@@ -14,7 +14,7 @@ public class ItemResponse {
 	private final Long id;
 	private final String itemName;
 	private final String unit;
-	private final String comment;
+	private final String comments;
 	private final int stockQuantity;
 	@Enumerated(EnumType.STRING)
 	private final StatusType statusType;
@@ -26,7 +26,7 @@ public class ItemResponse {
 		id = item.getId();
 		itemName = item.getItemName();
 		unit = item.getUnit();
-		comment = item.getComment();
+		comments = item.getComments();
 		stockQuantity = item.getStockQuantity();
 		statusType = item.getStatusType();
 		createdDate = item.getCreatedDate();

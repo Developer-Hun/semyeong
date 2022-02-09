@@ -23,13 +23,25 @@ public class Account extends BaseEntity {
 	@Id @GeneratedValue
 	@Column(name = "account_id")
 	private Long id;
+
 	private String accountName;
 	private String comments;
+
 	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
 	private List<ManagementItem> managementItems = new ArrayList<>();
+
 	@Convert(converter = StatusTypeConverter.class)
 	private StatusType statusType;
+
 	@Convert(converter = AccountTypeConverter.class)
 	private AccountType accountType;
 
+	/**
+	 * 연관 관계 메서드
+	 */
+	public void addManagementItem() {
+		for (ManagementItem managementItem : managementItems) {
+			managementItem.setAccount(this);
+		}
+	}
 }

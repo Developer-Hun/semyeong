@@ -12,7 +12,7 @@ import javax.persistence.Enumerated;
 public class ItemDomain {
 	private final String itemName;
 	private final String unit;
-	private final String comment;
+	private final String comments;
 	private final int stockQuantity;
 	@Enumerated(EnumType.STRING)
 	private final StatusType statusType;
@@ -20,7 +20,7 @@ public class ItemDomain {
 	public ItemDomain(ItemRequest request) {
 		itemName = request.getItemName();
 		unit = request.getUnit();
-		comment = request.getComment();
+		comments = request.getComments();
 		stockQuantity = request.getStockQuantity();
 		statusType = request.getStatusType();
 	}
@@ -33,7 +33,7 @@ public class ItemDomain {
 		return Item.builder()
 				.itemName(itemName)
 				.unit(unit)
-				.comment(comment)
+				.comments(comments)
 				.stockQuantity(stockQuantity)
 				.statusType(statusType)
 				.build();

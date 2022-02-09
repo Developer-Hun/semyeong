@@ -16,7 +16,7 @@ public class ItemRequest {
 	private Long id;
 	private String itemName;
 	private String unit;
-	private String comment;
+	private String comments;
 	private int stockQuantity;
 	@Enumerated(EnumType.STRING)
 	private StatusType statusType;

@@ -8,6 +8,10 @@ const accountNew = {
         // document.querySelector('#addItem').addEventListener('click', accountNew.addItem)
     },
 
+    saveAccount: () => {
+        accountNew.saveAccountRequest();
+    },
+
     getItems: () => {
         if (accountNew.items == undefined) {
             accountNew.getItemsRequest();
@@ -22,10 +26,10 @@ const accountNew = {
         const selectedId = target.value;
         const findItem = accountNew.items.find((item) => item.id == selectedId);
 
-        let tr = target.closest(`tr`);
-        tr.querySelector(`[name='unit']`).value = findItem.unit;
-        tr.querySelector(`[name='stockQuantity']`).value = findItem.stockQuantity;
-        tr.querySelector(`[name='comment']`).value = findItem.comment;
+        let itemRow = target.closest(`.item-row`);
+        itemRow.querySelector(`[name='unit']`).value = findItem.unit;
+        itemRow.querySelector(`[name='stockQuantity']`).value = findItem.stockQuantity;
+        itemRow.querySelector(`[name='comments']`).value = findItem.comments;
     },
 
     addItemRow: () => {
@@ -35,9 +39,9 @@ const accountNew = {
             return `<option value="${item.id}" >${item.itemName}</option>`
         }).join('')
 
-        let row =   `<tr>
+        let row =  `<tr class="item-row">
                         <td>
-                            <select class="select2_single form-control" tabIndex="-1" onchange="accountNew.setItem(this)">
+                            <select class="select2_single form-control" tabIndex="-1" name="item" onchange="accountNew.setItem(this)">
                                 <option value="" selected>선택해주세요</option>
                                 ${options}
                             </select>
@@ -46,13 +50,13 @@ const accountNew = {
                             <input type="text" class="form-control" name="unit" readOnly="readonly" value="">
                         </td>
                         <td>
-                            <input type="text" class="form-control" name="price" value="">
+                            <input type="text" class="form-control" name="basicPrice" value="">
                         </td>
                         <td>
                             <input type="text" class="form-control" name="stockQuantity" value="" readOnly="readonly">
                         </td>
                         <td>
-                            <input type="text" class="form-control" name="comment" value="" readOnly="readonly">
+                            <input type="text" class="form-control" name="comments" value="" readOnly="readonly">
                         </td>
                     </tr>`
 
@@ -72,5 +76,49 @@ const accountNew = {
         })
             .then(response => response.json())
             .then(data => successHandler(data))
+    },
+
+    saveAccountRequest: () => {
+        const accountName = document.querySelector('#accountName').value
+        const accountType = document.querySelector('#accountType').value
+        const statusType = document.querySelector('#statusType').value
+        const comments = document.querySelector('#comments').value
+
+        const request = {
+            accountName,
+            accountType,
+            statusType,
+            comments,
+            managementItemRequests: []
+        }
+
+        document.querySelectorAll('.item-row').forEach((target) => {
+            const itemRow = {
+                basicPrice: target.querySelector(`[name='basicPrice']`).value,
+                itemRequest : {
+                    id: target.querySelector(`[name='item']`).value,
+                    unit: target.querySelector(`[name='unit']`).value,
+                    stockQuantity: target.querySelector(`[name='stockQuantity']`).value,
+                    comments: target.querySelector(`[name='comments']`).value,
+                }
+            }
+            request.managementItemRequests.push(itemRow);
+        })
+
+        const successHandler= (data) => {
+            console.log("거래처 추가 완료 = ", data);
+        }
+
+        fetch("/account/save", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+            },
+            body: JSON.stringify(request)
+        })
+            .then((response) => response.text())
+            .then((data) => console.log(data))
+            .then((data) => successHandler(data))
+            .catch((error) => alert(error))
     }
 }

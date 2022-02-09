@@ -40,7 +40,7 @@ public class InitData {
 
 				request.setItemName("아이템" + i);
 				request.setUnit(unit);
-				request.setComment("비고" + i);
+				request.setComments("비고" + i);
 				request.setStatusType(statusType);
 				request.setStockQuantity(0);
 

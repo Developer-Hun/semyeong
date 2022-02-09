@@ -20,7 +20,7 @@ public class Item extends BaseEntity {
 	private Long id;
 	private String itemName;
 	private String unit;
-	private String comment;
+	private String comments;
 	private int stockQuantity;
 	@Convert(converter = StatusTypeConverter.class)
 	private StatusType statusType;
@@ -49,10 +49,10 @@ public class Item extends BaseEntity {
 	/**
 	 * 품목 정보 업데이트
 	 */
-	public void updateItem(String itemName, String unit, StatusType statusType, String comment) {
+	public void updateItem(String itemName, String unit, StatusType statusType, String comments) {
 		this.itemName = itemName;
 		this.unit = unit;
 		this.statusType = statusType;
-		this.comment = comment;
+		this.comments = comments;
 	}
 }

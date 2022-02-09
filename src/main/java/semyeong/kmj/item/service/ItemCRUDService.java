@@ -60,7 +60,7 @@ public class ItemCRUDService {
 				() -> new NoSuchElementException("수정할 아이템이 존재하지 않습니다.")
 		);
 
-		item.updateItem(request.getItemName(), request.getUnit(), request.getStatusType(), request.getComment());
+		item.updateItem(request.getItemName(), request.getUnit(), request.getStatusType(), request.getComments());
 	}
 
 	public void itemDelete(List<Long> itemIdArr) {
