@@ -42,13 +42,13 @@ const accountMain = {
             .then((data) => successHandler(data))
     },
 
-    showAccountEditRequest: (itemId) => {
+    showAccountEditRequest: (accountId) => {
         const successHandler= (data) => {
             document.querySelector('#modal-content').innerHTML = data;
-            accountEdit.bind();
+            // accountEdit.bind();
         }
 
-        fetch('/account/accountEdit/'+ itemId, {
+        fetch('/account/accountEdit/'+ accountId, {
             method: 'GET'
         })
             .then(response => response.text())

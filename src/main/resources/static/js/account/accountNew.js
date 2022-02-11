@@ -22,11 +22,24 @@ const accountNew = {
         accountNew.addItemRow();
     },
 
-    setItem: (target) => {
-        const selectedId = target.value;
+    setItem: (selectedTarget) => {
+        const selectedId = selectedTarget.value;
+
+        document.querySelectorAll('.item-row').forEach((target) => {
+            console.log("selectedTarget = ", selectedTarget);
+            console.log("target = ", target.querySelector(`[name='item']`));
+            if (selectedTarget == target.querySelector(`[name='item']`)) return console.log("동일한 태그입니다.")
+            if (target.querySelector(`[name='item']`).value == selectedId) {
+                selectedTarget.value = '';
+                return alert("같은 품목이 존재합니다.");
+            }
+        })
+
+        if (selectedTarget.value == '') return;
+
         const findItem = accountNew.items.find((item) => item.id == selectedId);
 
-        let itemRow = target.closest(`.item-row`);
+        let itemRow = selectedTarget.closest(`.item-row`);
         itemRow.querySelector(`[name='unit']`).value = findItem.unit;
         itemRow.querySelector(`[name='stockQuantity']`).value = findItem.stockQuantity;
         itemRow.querySelector(`[name='comments']`).value = findItem.comments;
@@ -93,6 +106,9 @@ const accountNew = {
         }
 
         document.querySelectorAll('.item-row').forEach((target) => {
+
+            if (target.querySelector(`[name='item']`).value == '') return console.log("아이템을 선택하지 않았습니다.");
+
             const itemRow = {
                 basicPrice: target.querySelector(`[name='basicPrice']`).value,
                 itemRequest : {
@@ -106,7 +122,17 @@ const accountNew = {
         })
 
         const successHandler= (data) => {
-            console.log("거래처 추가 완료 = ", data);
+            let parseData = JSON.parse(data);
+
+            if (parseData.status == undefined) {
+                alert("거래처 추가 완료")
+                $("#modal").modal('hide');
+
+                let currentPageNumber = document.querySelector("#currentPageNumber").value;
+                location.href = "/account/accountMain?page=" + currentPageNumber;
+            } else {
+                return alert(parseData.message);
+            }
         }
 
         fetch("/account/save", {
@@ -117,7 +143,6 @@ const accountNew = {
             body: JSON.stringify(request)
         })
             .then((response) => response.text())
-            .then((data) => console.log(data))
             .then((data) => successHandler(data))
             .catch((error) => alert(error))
     }

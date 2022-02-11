@@ -2,51 +2,98 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <div class="modal-header" style="align-items: center;">
-    <h2 class="modal-title" id="myModalLabel2">거래처 수정</h2>
+    <h6 class="modal-title" id="myModalLabel2">거래처 수정</h6>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
     </button>
 </div>
 <div class="modal-body">
-    <form class="form-horizontal form-label-left" th:object="${item}">
+    <form class="form-horizontal form-label-left" th:object="${account}">
         <input type="hidden" th:field="*{id}"/>
-        <div class="form-group row ">
-            <label class="control-label col-md-3 col-sm-3 ">품목명</label>
-            <div class="col-md-9 col-sm-9 ">
-                <input type="text" th:field="*{itemName}" class="form-control">
-            </div>
-        </div>
-        <div class="form-group row ">
-            <label class="control-label col-md-3 col-sm-3 ">단위</label>
-            <div class="col-md-9 col-sm-9 ">
-                <input type="text" th:field="*{unit}" class="form-control">
-            </div>
+        <div class="form-group row">
+            <label class="control-label col-md-1 col-sm-12">업체명</label>
+            <input type="text" id="accountName" th:field="*{accountName}" class="form-control col-md-3 col-sm-12">
+            <label class="control-label col-md-1 col-sm-12">구분</label>
+            <select id="accountType" th:field="*{accountType}" class="select2_single form-control col-md-3 col-sm-12" tabindex="-1">
+                <option value="purchase" selected>구매</option>
+                <option value="sale">판매</option>
+            </select>
+            <label class="control-label col-md-1 col-sm-12">상태</label>
+            <select id="statusType" th:field="*{statusType}" class="select2_single form-control col-md-3 col-sm-12" tabindex="-1">
+                <option value="enable" selected>사용</option>
+                <option value="disable">사용안함</option>
+            </select>
         </div>
         <div class="form-group row">
-            <label class="control-label col-md-3 col-sm-3 ">수량</label>
-            <div class="col-md-9 col-sm-9 ">
-                <input type="text" th:field="*{stockQuantity}" class="form-control" readonly="readonly" placeholder="Read-Only Input">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="control-label col-md-3 col-sm-3 ">상태</label>
-            <div class="col-md-9 col-sm-9 ">
-                <select th:field="*{statusType}" class="select2_single form-control" tabindex="-1">
-                    <option value="enable">사용</option>
-                    <option value="disable">사용안함</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="control-label col-md-3 col-sm-3 ">비고</label>
-            <div class="col-md-9 col-sm-9 ">
-                <textarea th:field="*{comments}" class="form-control" rows="3" placeholder=""></textarea>
-            </div>
+            <label class="control-label col-md-1 col-sm-12">비고</label>
+            <textarea id="comments" th:field="*{comments}" class="form-control col-md-11 col-sm-12" rows="3"></textarea>
         </div>
     </form>
+
+    <div class="x_title" style="display: flex; align-items: center; justify-content: space-between; margin: 15px 0 0 0;">
+        <h2>거래 품목</h2>
+        <button type="button" id="getItems" onclick="accountNew.getItems()" class="btn btn-success btn-sm" style="margin: 0px;">거래 품목 추가</button>
+    </div>
+
+    <table class="table table-striped" style="width: 97.5%; margin-bottom: 0px;">
+        <colgroup>
+            <col width="20%">
+            <col width="20%">
+            <col width="15%">
+            <col width="15%">
+            <col width="30%">
+        </colgroup>
+        <thead>
+        <tr>
+            <th style="border-top: 0px;">품목</th>
+            <th style="border-top: 0px;">단위</th>
+            <th style="border-top: 0px;">기본단가</th>
+            <th style="border-top: 0px;">현재수량</th>
+            <th style="border-top: 0px;">비고</th>
+        </tr>
+        </thead>
+    </table>
+    <div class="x_content" style="max-height: 250px; overflow-y: scroll; margin-top: 0px; padding: 0 3px 0 0;">
+        <table class="table table-striped" style="margin: 0;">
+            <colgroup>
+                <col width="20%">
+                <col width="20%">
+                <col width="15%">
+                <col width="15%">
+                <col width="30%">
+            </colgroup>
+            <tbody id="itemList">
+            <!--
+                TODO : 거래처 수정 시 품목에 대한 로직 구상
+                        -> 모든 품목을 보여줄 것인가 아니면 사용중인 품목만 보여줄 것인가 (품목관리 페이지 기준)
+                        -> 관리 품목 중에서 사용중 품목과 사용안함 품목을 어떻게 보여줄 것인가 (거래처 관리 품목 기준)
+             -->
+                <tr class="item-row" th:each="managementItem : ${account.getManagementItems()}">
+                    <td>
+                        <select class="select2_single form-control" tabIndex="-1" name="item" onchange="accountNew.setItem(this)">
+                            <option value="" selected>선택해주세요</option>
+                            ${options}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="unit" readOnly="readonly" value="">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="basicPrice" value="">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="stockQuantity" value="" readOnly="readonly">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="comments" value="" readOnly="readonly">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-    <button type="button" id="updateItem" class="btn btn-primary">변경</button>
+    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
+    <button type="button" id="saveAccount" class="btn btn-primary btn-sm" onclick="accountNew.saveAccount()">변경</button>
 </div>
 
 </html>
