@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import semyeong.kmj.account.entity.Account;
 import semyeong.kmj.common.common.AccountType;
 
-public interface AccountRepository extends JpaRepository<Account, Long> {
+public interface AccountRepository extends JpaRepository<Account, Long>, AccountDynamicRepository {
 	Boolean existsByAccountNameAndAccountType(String accountName, AccountType accountType);
 
 //	Page<Account> findAllByStatus(Pageable pageable, String status);

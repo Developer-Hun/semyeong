@@ -31,6 +31,6 @@ public class AccountReadService {
 				() -> new NoSuchElementException("해당 거래처가 존재하지 않습니다.")
 		);
 
-		return AccountResponse.from(account);
+		return AccountResponse.from(accountRepository.findAllByFetchJoin(accountId));
 	}
 }

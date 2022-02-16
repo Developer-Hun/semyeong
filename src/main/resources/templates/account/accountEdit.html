@@ -70,21 +70,20 @@
                 <tr class="item-row" th:each="managementItem : ${account.getManagementItems()}">
                     <td>
                         <select class="select2_single form-control" tabIndex="-1" name="item" onchange="accountNew.setItem(this)">
-                            <option value="" selected>선택해주세요</option>
-                            ${options}
+                            <option value="" th:value="${managementItem.id}" th:text="${managementItem.getItem().getItemName()}" selected>선택해주세요</option>
                         </select>
                     </td>
                     <td>
-                        <input type="text" class="form-control" name="unit" readOnly="readonly" value="">
+                        <input type="text" class="form-control" name="unit" readOnly="readonly" th:value="${managementItem.getItem().getUnit()}" value="">
                     </td>
                     <td>
-                        <input type="text" class="form-control" name="basicPrice" value="">
+                        <input type="text" class="form-control" name="basicPrice" th:value="${managementItem.getBasicPrice()}" value="">
                     </td>
                     <td>
-                        <input type="text" class="form-control" name="stockQuantity" value="" readOnly="readonly">
+                        <input type="text" class="form-control" name="stockQuantity" value="" th:value="${managementItem.getItem().getStockQuantity()}" readOnly="readonly">
                     </td>
                     <td>
-                        <input type="text" class="form-control" name="comments" value="" readOnly="readonly">
+                        <input type="text" class="form-control" name="comments" value="" th:value="${managementItem.getComments()}" readOnly="readonly">
                     </td>
                 </tr>
             </tbody>
