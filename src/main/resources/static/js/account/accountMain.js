@@ -32,7 +32,7 @@ const accountMain = {
     showAccountNewRequest: () => {
         const successHandler= (data) => {
             document.querySelector('#modal-content').innerHTML = data;
-            accountNew.bind();
+            accountEdit.bind();
         }
 
         fetch("/account/accountNew", {

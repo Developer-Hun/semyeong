@@ -31,7 +31,7 @@
 
     <div class="x_title" style="display: flex; align-items: center; justify-content: space-between; margin: 15px 0 0 0;">
         <h2>거래 품목</h2>
-        <button type="button" id="getItems" onclick="accountNew.getItems()" class="btn btn-success btn-sm" style="margin: 0px;">거래 품목 추가</button>
+        <button type="button" id="getItems" onclick="accountEdit.getItems()" class="btn btn-success btn-sm" style="margin: 0px;">거래 품목 추가</button>
     </div>
 
     <table class="table table-striped" style="width: 97.5%; margin-bottom: 0px;">
@@ -69,7 +69,7 @@
              -->
                 <tr class="item-row" th:each="managementItem : ${account.getManagementItems()}">
                     <td>
-                        <select class="select2_single form-control" tabIndex="-1" name="item" onchange="accountNew.setItem(this)">
+                        <select class="select2_single form-control" tabIndex="-1" name="item" onclick="accountEdit.getItems()" onchange="accountEdit.setItem(this)">
                             <option value="" th:value="${managementItem.id}" th:text="${managementItem.getItem().getItemName()}" selected>선택해주세요</option>
                         </select>
                     </td>
@@ -92,7 +92,7 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
-    <button type="button" id="saveAccount" class="btn btn-primary btn-sm" onclick="accountNew.saveAccount()">변경</button>
+    <button type="button" id="saveAccount" class="btn btn-primary btn-sm" onclick="accountEdit.saveAccount()">변경</button>
 </div>
 
 </html>
