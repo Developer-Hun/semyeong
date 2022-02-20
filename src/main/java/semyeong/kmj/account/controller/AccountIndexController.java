@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import semyeong.kmj.account.dto.AccountResponse;
 import semyeong.kmj.account.service.AccountReadService;
+import semyeong.kmj.common.common.StatusType;
+import semyeong.kmj.item.dto.ItemResponse;
+import semyeong.kmj.item.service.ItemReadService;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,6 +24,7 @@ import semyeong.kmj.account.service.AccountReadService;
 public class AccountIndexController {
 
 	private final AccountReadService accountReadService;
+	private final ItemReadService itemReadService;
 
 	@GetMapping("/account/accountMain")
 	public String main(@PageableDefault(size = 5, sort = "id", direction = Sort.Direction.ASC) final Pageable pageable, Model model) {
@@ -38,7 +44,9 @@ public class AccountIndexController {
 	public String accountEdit(@PathVariable Long accountId, Model model) {
 		log.info("start accountEdit...");
 		AccountResponse accountResponse = accountReadService.accountOne(accountId);
+		List<ItemResponse> itemResponses = itemReadService.itemSelectByStatus(StatusType.enable);
 		model.addAttribute("account", accountResponse);
+		model.addAttribute("items", itemResponses);
 		return "account/accountEdit";
 	}
 }

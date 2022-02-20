@@ -34,10 +34,10 @@ public class AccountRequest {
 	public List<ManagementItem> getManagementItemsConverter() {
 		return this.managementItemRequests.stream()
 				.map(managementItemRequest -> ManagementItem.builder()
+						.id(managementItemRequest.getId())
 						.item(managementItemRequest.getItemConverter())
 //						.account(managementItemRequest.getAccountConverter())
 						.basicPrice(managementItemRequest.getBasicPrice())
-						.id(managementItemRequest.getId())
 						.build()
 				).collect(Collectors.toList());
 	}

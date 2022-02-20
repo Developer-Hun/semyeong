@@ -12,6 +12,17 @@ const accountNew = {
         accountNew.saveAccountRequest();
     },
 
+    checkAll: () => {
+        let checked = document.querySelector(`#managementItem-check-all`).checked;
+        document.querySelectorAll(`input[name=managementItem-check]`).forEach( target => {
+            if (checked) {
+                target.checked = true;
+            } else {
+                target.checked = false;
+            }
+        })
+    },
+
     getItems: () => {
         if (accountNew.items == undefined) {
             accountNew.getItemsRequest();
@@ -19,10 +30,10 @@ const accountNew = {
         }
         if (accountNew.items.length == 0) return alert ("현재 시스템에 등록된 품목이 없습니다.");
 
-        accountNew.addItemRow();
+        accountNew.addManagementItemRow();
     },
 
-    setItem: (selectedTarget) => {
+    setItemInfo: (selectedTarget) => {
         const selectedId = selectedTarget.value;
 
         document.querySelectorAll('.item-row').forEach((target) => {
@@ -45,7 +56,7 @@ const accountNew = {
         itemRow.querySelector(`[name='comments']`).value = findItem.comments;
     },
 
-    addItemRow: () => {
+    addManagementItemRow: () => {
         let tbodyTag = document.querySelector('#itemList');
 
         const options = accountNew.items.map((item, i) => {
@@ -53,8 +64,13 @@ const accountNew = {
         }).join('')
 
         let row =  `<tr class="item-row">
+                        <td style="vertical-align: middle;">
+                            <div style="display: flex;">
+                                <input type="checkbox" name="managementItem-check" value="null">
+                            </div>
+                        </td>
                         <td>
-                            <select class="select2_single form-control" tabIndex="-1" name="item" onchange="accountNew.setItem(this)">
+                            <select class="select2_single form-control" tabIndex="-1" name="item" onchange="accountNew.setItemInfo(this)">
                                 <option value="" selected>선택해주세요</option>
                                 ${options}
                             </select>
@@ -76,10 +92,18 @@ const accountNew = {
         tbodyTag.insertAdjacentHTML('beforeend', row);
     },
 
+    deleteManagementItemRow: () => {
+        if (!confirm("선택하신 거래 품목을 삭제하시겠습니까?")) return;
+
+        document.querySelectorAll(`input[name=managementItem-check]:checked`).forEach(target => {
+            target.closest(`.item-row`).remove();
+        })
+    },
+
     getItemsRequest: () => {
         const successHandler= (data) => {
             accountNew.items = data;
-            accountNew.addItemRow();
+            accountNew.addManagementItemRow();
         }
 
         let statusType = 'enable';

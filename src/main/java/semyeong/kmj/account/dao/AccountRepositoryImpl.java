@@ -24,8 +24,8 @@ public class AccountRepositoryImpl implements AccountDynamicRepository {
 	@Override
 	public Account findAllByFetchJoin(Long accountId) {
 		return queryFactory.selectFrom(account)
-//				.join(account.managementItems, managementItem)
-//				.join(managementItem.item, item)
+				.leftJoin(account.managementItems, managementItem).fetchJoin()
+				.leftJoin(managementItem.item, item).fetchJoin()
 				.where(account.id.eq(accountId))
 				.fetchOne();
 	}

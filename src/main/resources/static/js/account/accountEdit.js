@@ -12,6 +12,17 @@ const accountEdit = {
         accountEdit.editAccountRequest();
     },
 
+    checkAll: () => {
+        let checked = document.querySelector(`#managementItem-check-all`).checked;
+        document.querySelectorAll(`input[name=managementItem-check]`).forEach( target => {
+            if (checked) {
+                target.checked = true;
+            } else {
+                target.checked = false;
+            }
+        })
+    },
+
     getItems: () => {
         if (accountEdit.items == undefined) {
             accountEdit.getItemsRequest();
@@ -19,11 +30,11 @@ const accountEdit = {
         }
         if (accountEdit.items.length == 0) return alert ("현재 시스템에 등록된 품목이 없습니다.");
 
-        accountEdit.addItemRow();
+        accountEdit.addManagementItemRow();
     },
 
     // TODO : 관리품목 삭제 기능 추가 필요, selectbox 클릭 시 가져온 데이터 세팅, 수정 시 새로운 데이터 및 변경 데이터 적용 여부 확인
-    setItem: (selectedTarget) => {
+    setItemInfo: (selectedTarget) => {
         const selectedId = selectedTarget.value;
 
         document.querySelectorAll('.item-row').forEach((target) => {
@@ -46,7 +57,7 @@ const accountEdit = {
         itemRow.querySelector(`[name='comments']`).value = findItem.comments;
     },
 
-    addItemRow: () => {
+    addManagementItemRow: () => {
         let tbodyTag = document.querySelector('#itemList');
 
         const options = accountEdit.items.map((item, i) => {
@@ -54,8 +65,14 @@ const accountEdit = {
         }).join('')
 
         let row =  `<tr class="item-row">
+                        <input type="hidden" name="managementItemId" value="null"/>
+                        <td style="vertical-align: middle;">
+                            <div style="display: flex;">
+                                <input type="checkbox" name="managementItem-check" value="null">
+                            </div>
+                        </td>
                         <td>
-                            <select class="select2_single form-control" tabIndex="-1" name="item" onchange="accountEdit.setItem(this)">
+                            <select class="select2_single form-control" tabIndex="-1" name="item" onchange="accountEdit.setItemInfo(this)">
                                 <option value="" selected>선택해주세요</option>
                                 ${options}
                             </select>
@@ -77,10 +94,16 @@ const accountEdit = {
         tbodyTag.insertAdjacentHTML('beforeend', row);
     },
 
+    deleteManagementItemRow: () => {
+        if (!confirm("선택하신 거래 품목을 삭제하시겠습니까?")) return;
+
+        accountEdit.deleteManagementItemRequest();
+    },
+
     getItemsRequest: () => {
         const successHandler= (data) => {
             accountEdit.items = data;
-            accountEdit.addItemRow();
+            accountEdit.addManagementItemRow();
         }
 
         let statusType = 'enable';
@@ -93,12 +116,14 @@ const accountEdit = {
     },
 
     editAccountRequest: () => {
+        const id = document.querySelector('#id').value
         const accountName = document.querySelector('#accountName').value
         const accountType = document.querySelector('#accountType').value
         const statusType = document.querySelector('#statusType').value
         const comments = document.querySelector('#comments').value
 
         const request = {
+            id,
             accountName,
             accountType,
             statusType,
@@ -111,6 +136,7 @@ const accountEdit = {
             if (target.querySelector(`[name='item']`).value == '') return console.log("아이템을 선택하지 않았습니다.");
 
             const itemRow = {
+                id : target.querySelector(`[name='managementItemId']`).value,
                 basicPrice: target.querySelector(`[name='basicPrice']`).value,
                 itemRequest : {
                     id: target.querySelector(`[name='item']`).value,
@@ -123,6 +149,7 @@ const accountEdit = {
         })
 
         const successHandler= (data) => {
+            console.log(data);
             let parseData = JSON.parse(data);
 
             if (parseData.status == undefined) {
@@ -146,5 +173,30 @@ const accountEdit = {
             .then((response) => response.text())
             .then((data) => successHandler(data))
             .catch((error) => alert(error))
+    },
+
+    deleteManagementItemRequest: () => {
+        let deleteManagementItemIdList = []
+        document.querySelectorAll(`input[name=managementItem-check]:checked`).forEach(target => {
+            if (target.value != null) deleteManagementItemIdList.push(target.value);
+            target.closest(`.item-row`).remove();
+        })
+
+        const request = deleteManagementItemIdList
+
+        const successHandler= (data) => {
+            alert("선택하신 거래 품목이 삭제되었습니다.");
+        }
+
+        fetch('/managementItem/delete', {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+            },
+            body: JSON.stringify(request)
+        })
+            .then((response) => response.text())
+            .then(data => successHandler(data))
+
     }
 }

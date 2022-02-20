@@ -39,4 +39,19 @@ public class ManagementItem extends BaseEntity {
 	public void setAccount(Account account) {
 		this.account = account;
 	}
+
+	public void setItem(Item item) {
+		this.item = item;
+	}
+
+	public void updateManagementItem(ManagementItem updateManagementItem) {
+		this.basicPrice = updateManagementItem.getBasicPrice();
+		this.comments = updateManagementItem.getComments();
+		setItem(updateManagementItem.getItem());
+	}
+
+	public void deleteManagementItem(ManagementItem managementItem) {
+		account.getManagementItems().remove(managementItem);
+		managementItem.setAccount(null);
+	}
 }

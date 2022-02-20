@@ -39,9 +39,43 @@ public class Account extends BaseEntity {
 	/**
 	 * 연관 관계 메서드
 	 */
-	public void addManagementItem() {
-		for (ManagementItem managementItem : managementItems) {
+	
+	// 거래 품목 추가(단일)
+	public void addManagementItem(ManagementItem managementItem) {
+		managementItem.setAccount(this);
+		this.managementItems.add(managementItem);
+	}
+
+	// 거래 품목 추가(다중)
+	public void addManagementItems(List<ManagementItem> managementItemList) {
+		System.out.println("managementItemList = " + managementItemList);
+		for (ManagementItem managementItem : managementItemList) {
+			System.out.println("managementItem.getComments() = " + managementItem.getComments());
+			System.out.println("managementItem.getBasicPrice() = " + managementItem.getBasicPrice());
 			managementItem.setAccount(this);
+			this.managementItems.add(managementItem);
 		}
+	}
+
+	/**
+	 * 서비스 로직
+	 */
+	
+	// 거래 품목 정보 변경
+	public void updateManagementItems(List<ManagementItem> managementItems) {
+		this.managementItems.forEach(originManegementItem -> {
+			managementItems.forEach(updateManagementItem -> {
+				if (originManegementItem.getId() == updateManagementItem.getId()) {
+					originManegementItem.updateManagementItem(updateManagementItem);
+				}
+			});
+		});
+	}
+
+	public void updateAccountInfo(AccountType accountType, StatusType statusType, String accountName, String comments) {
+		this.accountType = accountType;
+		this.statusType = statusType;
+		this.accountName = accountName;
+		this.comments = comments;
 	}
 }

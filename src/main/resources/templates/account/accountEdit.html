@@ -31,11 +31,15 @@
 
     <div class="x_title" style="display: flex; align-items: center; justify-content: space-between; margin: 15px 0 0 0;">
         <h2>거래 품목</h2>
-        <button type="button" id="getItems" onclick="accountEdit.getItems()" class="btn btn-success btn-sm" style="margin: 0px;">거래 품목 추가</button>
+        <div>
+            <button type="button" id="deleteManagementItems" onclick="accountEdit.deleteManagementItemRow()" class="btn btn-danger btn-sm" style="margin: 0px;">거래 품목 삭제</button>
+            <button type="button" id="getItems" onclick="accountEdit.getItems()" class="btn btn-success btn-sm" style="margin: 0px;">거래 품목 추가</button>
+        </div>
     </div>
 
     <table class="table table-striped" style="width: 97.5%; margin-bottom: 0px;">
         <colgroup>
+            <col width="5%">
             <col width="20%">
             <col width="20%">
             <col width="15%">
@@ -44,6 +48,11 @@
         </colgroup>
         <thead>
         <tr>
+            <th style="border-top: 0px; vertical-align: middle;">
+                <div style="display: flex;">
+                    <input type="checkbox" id="managementItem-check-all" onclick="accountEdit.checkAll()">
+                </div>
+            </th>
             <th style="border-top: 0px;">품목</th>
             <th style="border-top: 0px;">단위</th>
             <th style="border-top: 0px;">기본단가</th>
@@ -55,22 +64,37 @@
     <div class="x_content" style="max-height: 250px; overflow-y: scroll; margin-top: 0px; padding: 0 3px 0 0;">
         <table class="table table-striped" style="margin: 0;">
             <colgroup>
+                <col width="5%">
                 <col width="20%">
                 <col width="20%">
                 <col width="15%">
                 <col width="15%">
                 <col width="30%">
+<!--                <col width="30%">-->
             </colgroup>
             <tbody id="itemList">
             <!--
                 TODO : 거래처 수정 시 품목에 대한 로직 구상
                         -> 모든 품목을 보여줄 것인가 아니면 사용중인 품목만 보여줄 것인가 (품목관리 페이지 기준)
                         -> 관리 품목 중에서 사용중 품목과 사용안함 품목을 어떻게 보여줄 것인가 (거래처 관리 품목 기준)
+                        * 즉 사용안함 상태의 품목은 거래처의 거래품목에서 보여줄것인가 아닌가 고민해보아야함.
              -->
                 <tr class="item-row" th:each="managementItem : ${account.getManagementItems()}">
+                    <input type="hidden" name="managementItemId" th:value="*{managementItem.getId()}"/>
+                    <td style="vertical-align: middle;">
+                        <div style="display: flex;">
+                            <input type="checkbox" name="managementItem-check" th:value="${managementItem.getId()}">
+                        </div>
+                    </td>
                     <td>
-                        <select class="select2_single form-control" tabIndex="-1" name="item" onclick="accountEdit.getItems()" onchange="accountEdit.setItem(this)">
-                            <option value="" th:value="${managementItem.id}" th:text="${managementItem.getItem().getItemName()}" selected>선택해주세요</option>
+                        <select class="select2_single form-control" tabIndex="-1" name="item" th:value="${managementItem.getItem().getId()}" onchange="accountEdit.setItemInfo(this)">
+                            <option value=""
+                                    th:each="item : ${items}"
+                                    th:value="${item.id}"
+                                    th:text="${item.itemName}"
+                                    th:selected="${managementItem.getItem().getId() == item.id}">
+                                선택해주세요
+                            </option>
                         </select>
                     </td>
                     <td>
@@ -85,6 +109,9 @@
                     <td>
                         <input type="text" class="form-control" name="comments" value="" th:value="${managementItem.getComments()}" readOnly="readonly">
                     </td>
+<!--                    <td>-->
+<!--                        <button type="button" class="btn btn-primary btn-sm" onclick="">삭제</button>-->
+<!--                    </td>-->
                 </tr>
             </tbody>
         </table>
@@ -92,7 +119,7 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
-    <button type="button" id="saveAccount" class="btn btn-primary btn-sm" onclick="accountEdit.saveAccount()">변경</button>
+    <button type="button" id="saveAccount" class="btn btn-primary btn-sm" onclick="accountEdit.editAccount()">변경</button>
 </div>
 
 </html>

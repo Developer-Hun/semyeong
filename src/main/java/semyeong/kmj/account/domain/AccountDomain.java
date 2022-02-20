@@ -9,7 +9,6 @@ import semyeong.kmj.managementItem.entity.ManagementItem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 public class AccountDomain {
@@ -35,13 +34,14 @@ public class AccountDomain {
 		Account account = Account.builder()
 				.accountName(accountName)
 				.comments(comments)
-				.managementItems(managementItems)
+				.managementItems(new ArrayList<>())
 				.statusType(statusType)
 				.accountType(accountType)
 				.build();
 
 		// TODO : 연관 관계 메서드에 대한 연구가 조금 더 필요하다. 현재 방법은 뭔가 잘못된 느낌.
-		account.addManagementItem();
+		account.addManagementItems(managementItems);
+
 		return account;
 	}
 }
