@@ -1,0 +1,106 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+
+<head>
+    <!-- title -->
+    <title>구매/판매 관리</title>
+    <!-- /title -->
+
+    <!-- 사용자 style -->
+    <th:block layout:fragment="userStyle">
+    </th:block>
+    <!-- /style -->
+</head>
+
+<body>
+    <!-- content title -->
+    <div class="title_left" layout:fragment="contentTitle">
+        <h3></h3>
+    </div>
+    <!-- /content title -->
+
+    <!-- modal  -->
+    <div id="modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" layout:fragment="contentModal">
+        <div class="modal-dialog modal-lg">
+            <div id="modal-content" class="modal-content"></div>
+        </div>
+    </div>
+    <!-- /modal -->
+
+    <!-- hidden inputs -->
+    <form id="hiddenInputs" layout:fragment="hiddenInputs">
+<!--        <input type="hidden" th:id="currentPageNumber" th:value="${orderPage.getNumber()}">-->
+    </form>
+    <!-- /hidden inputs -->
+
+    <!-- content body -->
+    <div class="col-md-12 col-sm-12" layout:fragment="contentBody">
+        <div class="x_panel">
+            <div class="x_title" style="display: flex; align-items: center; justify-content: space-between;">
+                <h2>거래처 관리</h2>
+                <div>
+                    <button id="showOrderNewBtn" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg">추가</button>
+                    <button id="deleteOrderBtn" type="button" class="btn btn-danger btn-sm">삭제</button>
+                </div>
+            </div>
+            <div class="x_content">
+                <div class="x_content">
+                    <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="true">전체</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="purchase-tab" data-toggle="tab" href="#purchase" role="tab" aria-controls="purchase" aria-selected="false">구매</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="sale-tab" data-toggle="tab" href="#sale" role="tab" aria-controls="sale" aria-selected="false">판매</a>
+                        </li>
+                    </ul>
+                    <div class="table-responsive">
+                        <table class="table table-striped jambo_table bulk_action" style="text-align: center">
+                            <thead>
+                                <tr class="headings">
+                                    <th>
+                                        <div class="icheckbox_flat-green" style="position: relative;">
+                                            <input type="checkbox" id="check-all" class="flat" style="position: absolute; opacity: 0;">
+                                        </div>
+                                    </th>
+                                    <th class="column-title" style="display: table-cell;">순번</th>
+                                    <th class="column-title" style="display: table-cell;">구분</th>
+                                    <th class="column-title" style="display: table-cell;">업체명</th>
+                                    <th class="column-title" style="display: table-cell;">상태</th>
+                                    <th class="column-title" style="display: table-cell;">비고</th>
+                                    <th class="column-title" style="display: table-cell;">등록일</th>
+                                    <th class="column-title" style="display: table-cell;">수정일</th>
+                                    <th class="column-title no-link last" style="display: table-cell;"><span class="nobr">상세보기</span></th>
+                                    <th class="bulk-actions" colspan="9" style="display: none;">
+                                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt">1 Records Selected</span> ) <i class="fa fa-chevron-down"></i></a>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /content body -->
+
+    <div layout:fragment="paging">
+<!--        <ul th:replace="~{common/pagination::pagination (${orderPage.totalElements}, ${orderPage.isLast()}, ${orderPage.totalPages},-->
+<!--                                                        ${orderPage.getNumber()}, ${orderPage.getSize()}, ${orderPage.isFirst()},-->
+<!--                                                        ${orderPage.getNumberOfElements()}, ${orderPage.isEmpty()})}">-->
+<!--        </ul>-->
+    </div>
+
+    <!-- 사용자 script -->
+    <th:block layout:fragment="userScript">
+        <script th:src="@{/js/order/orderMain.js}"></script>
+        <script th:src="@{/js/order/orderNew.js}"></script>
+        <script th:src="@{/js/order/orderEdit.js}"></script>
+    </th:block>
+    <!-- /script -->
+</body>
+</html>
